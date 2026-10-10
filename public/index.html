@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dead Reckoning</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🧭</text></svg>">
+</head>
+<body>
+
+<header class="bar">
+  <div class="mark">Dead&nbsp;<em>Reckoning</em></div>
+  <div class="seedline" id="seedline"></div>
+  <button class="stat" id="imgToggle" type="button" hidden aria-pressed="true">Illustrations on</button>
+  <button class="stat" id="stat" type="button" title="API key"><span class="dot"></span><span id="statText">checking…</span></button>
+</header>
+
+<!-- The key card lives here and gets moved into whichever slot needs it:
+     the setup screen when there's no key, the dialog once there is one. -->
+<div class="keyCard" id="keyCard" hidden>
+  <h3 id="keyTitle">Add your Gemini API key</h3>
+  <p class="keyNote">The page hands it to your local server, which keeps it and talks to Google for you. It is never stored in the browser.</p>
+
+  <form id="keyForm">
+    <div class="keyRow">
+      <input id="keyInput" type="password" placeholder="AIza…" autocomplete="off" spellcheck="false" aria-label="Gemini API key">
+      <button type="button" class="ghost" id="keyPeek">Show</button>
+      <button type="submit" id="keySave" class="btn">Verify</button>
+    </div>
+    <label class="check">
+      <input type="checkbox" id="keyRemember" checked>
+      Remember on this machine <span>— writes .env, which is gitignored</span>
+    </label>
+    <p class="keyMsg" id="keyMsg" hidden></p>
+  </form>
+
+  <div class="keyHave" id="keyHave" hidden>
+    <span id="keyHaveText"></span>
+    <button type="button" class="ghost" id="keyForget">Forget key</button>
+  </div>
+
+  <p class="keyGet">No key yet? Create one free at
+    <a href="https://aistudio.google.com/apikey" target="_blank" rel="noreferrer">aistudio.google.com/apikey</a>.</p>
+</div>
+
+<dialog id="keyDlg">
+  <button type="button" class="dlgX" id="keyDlgX" aria-label="Close">&times;</button>
+  <div id="slotDialog"></div>
+</dialog>
+
+<!-- ------------------------------------------------------------- setup -->
+<section class="setup" id="setup">
+  <div class="setupInner">
+    <p class="eyebrow">No map is given to you. One is kept.</p>
+    <h1>Name a place.<br>Something will be waiting in it.</h1>
+    <p class="lede">Gemini builds the world and runs it honestly — a finite place with real
+      geography, things you can carry, and consequences that stick. The chart on the right
+      draws itself from nothing but the directions you travel.</p>
+
+    <div class="seeds" id="seeds"></div>
+
+    <form class="seedForm" id="seedForm">
+      <label for="seedInput">or write your own</label>
+      <div class="row">
+        <input id="seedInput" type="text" autocomplete="off" spellcheck="false"
+               placeholder="a cathedral grown from a single fossil, still growing">
+        <button type="submit" id="beginBtn" class="btn">Set out</button>
+      </div>
+    </form>
+
+    <div id="slotSetup"></div>
+  </div>
+</section>
+
+<!-- -------------------------------------------------------------- game -->
+<main class="game" id="game" hidden>
+  <section class="log" id="log" aria-live="polite"></section>
+
+  <aside class="chart">
+    <div class="chartHead">
+      <span>Chart</span>
+      <span id="chartCount">—</span>
+    </div>
+    <div class="mapWrap"><canvas id="map"></canvas></div>
+
+    <div class="panel">
+      <div class="panelHead">Ways out</div>
+      <div class="exits" id="exits"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panelHead">Carrying</div>
+      <ul class="pack" id="pack"><li class="none">nothing</li></ul>
+    </div>
+  </aside>
+</main>
+
+<!-- ------------------------------------------------------------ console -->
+<footer class="console" id="console" hidden>
+  <div class="sugg" id="sugg"></div>
+  <form id="form" autocomplete="off">
+    <span class="prompt">&rsaquo;</span>
+    <input id="cmd" type="text" spellcheck="false" placeholder="what do you do?" disabled>
+    <button type="submit" id="send" class="btn" disabled>Act</button>
+  </form>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
